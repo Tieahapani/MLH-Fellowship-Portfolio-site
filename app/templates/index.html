@@ -16,6 +16,7 @@
 
     <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
     <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <title>{{ title }}</title>
 </head>
 
@@ -36,5 +37,40 @@
         </div>
         <h1>{{ title }}</h1>
     </div>
+
+    <!-- Map Section -->
+    <section class="section map-section">
+        <h2>Places I've Visited</h2>
+        <div id="map"></div>
+    </section>
+
+    <footer>
+        <p>Made with Flask & Jinja | MLH Fellowship</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = [
+            {% for loc in locations %}
+            {
+                name: "{{ loc.name }}",
+                lat: {{ loc.lat }},
+                lng: {{ loc.lng }},
+                note: "{{ loc.note }}"
+            }{{ "," if not loop.last }}
+            {% endfor %}
+        ];
+
+        locations.forEach(function(loc) {
+            L.marker([loc.lat, loc.lng])
+                .addTo(map)
+                .bindPopup("<strong>" + loc.name + "</strong><br>" + loc.note);
+        });
+    </script>
 </body>
 </html>
