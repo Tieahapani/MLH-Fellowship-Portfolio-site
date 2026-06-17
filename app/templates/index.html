@@ -36,5 +36,18 @@
         </div>
         <h1>{{ title }}</h1>
     </div>
+
+    <!-- Hobbies Section -->
+    <section class="section hobbies">
+        <h2>Hobbies</h2>
+        <div class="hobbies-grid">
+            {% for hobby in hobbies %}
+            <div class="hobby-card">
+                <h3>{{ hobby.name }}</h3>
+                <p>{{ hobby.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </body>
 </html>
