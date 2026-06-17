@@ -36,5 +36,22 @@
         </div>
         <h1>{{ title }}</h1>
     </div>
+
+    <!-- Education Section -->
+    <section class="section education">
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="card">
+            <h3>{{ edu.school }}</h3>
+            {% if edu.location %}
+            <p class="subtitle">{{ edu.location }}</p>
+            {% endif %}
+            <p class="subtitle">{{ edu.degree }} | {{ edu.dates }}</p>
+            {% if edu.details %}
+            <p>{{ edu.details }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
 </body>
 </html>
