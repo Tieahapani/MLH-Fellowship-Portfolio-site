@@ -95,3 +95,26 @@ body {
     font-size: 50px;
     font-weight: 700;
 }
+
+/* Sections */
+.section {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+}
+
+.section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1C539F;
+    border-bottom: 3px solid #1C539F;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+/* About */
+.about p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #333;
+}
