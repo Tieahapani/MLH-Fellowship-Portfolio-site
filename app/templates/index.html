@@ -1,10 +1,137 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta property="og:title" content="Personal Portfolio">
+    <meta property="og:description" content="My Personal Portfolio">
+    <meta property="og:url" content="{{ url }}">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/">
+                <div class="nav-logo">
+                    <img src="./static/img/logo.svg" />
+                </div>
+            </a>
+            <nav>
+                {% for page in pages %}
+                <a href="{{ page.url }}">{{ page.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Profile Section -->
     <div class="profile">
         <div id="profile-picture" class="profile-picture">
             <img src="./static/img/IMG_5674.JPG" alt="Tiea's photo">
         </div>
         <h1>{{ title }}</h1>
     </div>
-{% endblock %}
+
+    <!-- About Section -->
+    <section class="section about">
+        <h2>About Me</h2>
+        <p>
+            I love learning and am always looking for ways to grow. I'm currently building
+            <strong>ASGo</strong>, a travel management platform for Associated Students.
+            My friends say I'm a good listener, and I look forward to being more ambitious in life.
+        </p>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section class="section experiences">
+        <h2>Work Experience</h2>
+        {% for exp in experiences %}
+        <div class="card">
+            <h3>{{ exp.role }}</h3>
+            <p class="subtitle">{{ exp.company }} | {{ exp.dates }}</p>
+            <ul>
+                {% for bullet in exp.bullets %}
+                <li>{{ bullet }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- Education Section -->
+    <section class="section education">
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="card">
+            <h3>{{ edu.school }}</h3>
+            {% if edu.location %}
+            <p class="subtitle">{{ edu.location }}</p>
+            {% endif %}
+            <p class="subtitle">{{ edu.degree }} | {{ edu.dates }}</p>
+            {% if edu.details %}
+            <p>{{ edu.details }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- Hobbies Section -->
+    <section class="section hobbies">
+        <h2>Hobbies</h2>
+        <div class="hobbies-grid">
+            {% for hobby in hobbies %}
+            <div class="hobby-card">
+                <h3>{{ hobby.name }}</h3>
+                <p>{{ hobby.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section map-section">
+        <h2>Places I've Visited</h2>
+        <div id="map"></div>
+    </section>
+
+    <footer>
+        <p>Made with Flask & Jinja | MLH Fellowship</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = [
+            {% for loc in locations %}
+            {
+                name: "{{ loc.name }}",
+                lat: {{ loc.lat }},
+                lng: {{ loc.lng }},
+                note: "{{ loc.note }}"
+            }{{ "," if not loop.last }}
+            {% endfor %}
+        ];
+
+        locations.forEach(function(loc) {
+            L.marker([loc.lat, loc.lng])
+                .addTo(map)
+                .bindPopup("<strong>" + loc.name + "</strong><br>" + loc.note);
+        });
+    </script>
+</body>
+</html>
