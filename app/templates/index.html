@@ -36,5 +36,51 @@
         </div>
         <h1>{{ title }}</h1>
     </div>
+
+    <!-- Work Experience Section -->
+    <section class="section experiences">
+        <h2>Work Experience</h2>
+        {% for exp in experiences %}
+        <div class="card">
+            <h3>{{ exp.role }}</h3>
+            <p class="subtitle">{{ exp.company }} | {{ exp.dates }}</p>
+            <ul>
+                {% for bullet in exp.bullets %}
+                <li>{{ bullet }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- Education Section -->
+    <section class="section education">
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="card">
+            <h3>{{ edu.school }}</h3>
+            {% if edu.location %}
+            <p class="subtitle">{{ edu.location }}</p>
+            {% endif %}
+            <p class="subtitle">{{ edu.degree }} | {{ edu.dates }}</p>
+            {% if edu.details %}
+            <p>{{ edu.details }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- Hobbies Section -->
+    <section class="section hobbies">
+        <h2>Hobbies</h2>
+        <div class="hobbies-grid">
+            {% for hobby in hobbies %}
+            <div class="hobby-card">
+                <h3>{{ hobby.name }}</h3>
+                <p>{{ hobby.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </body>
 </html>
