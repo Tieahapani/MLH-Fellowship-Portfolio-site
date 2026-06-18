@@ -41,12 +41,45 @@ body {
     width: 200px;
 }
 
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
 .nav-content nav {
-    display: block;
-    width: 100%;
-    text-align: right;
-    padding-top: 0px;
-    padding-right: 0px;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-content nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.nav-content nav a:hover {
+    background-color: rgba(255,255,255,0.15);
+}
+
+/* Sections */
+.section {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+}
+
+.section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1C539F;
+    border-bottom: 3px solid #1C539F;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
 }
 
 .profile {
