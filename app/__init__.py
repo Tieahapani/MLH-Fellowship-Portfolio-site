@@ -55,18 +55,22 @@ hobbies = [
     {
         "name": "Early Morning Walks",
         "description": "Taking early morning walks calms me down and helps me start the day fresh.",
+        "image": "hobby_walks.jpg",
     },
     {
         "name": "Listening to Podcasts",
         "description": "I love tuning into podcasts to learn new things and hear different perspectives.",
+        "image": "hobby_podcasts.jpg",
     },
     {
         "name": "Trying New Foods",
         "description": "Exploring different cuisines and flavors is one of my favorite things to do.",
+        "image": "hobby_food.jpg",
     },
     {
         "name": "Building Projects & Learning New Skills",
         "description": "I enjoy building new projects and constantly picking up new skills to grow as a developer.",
+        "image": "hobby_coding.jpg",
     },
 ]
 

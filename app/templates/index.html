@@ -41,6 +41,7 @@
             <img src="./static/img/IMG_5674.JPG" alt="Tiea's photo">
         </div>
         <h1>{{ title }}</h1>
+        <p class="tagline">Developer &middot; Learner &middot; Builder</p>
     </div>
 
     <!-- About Section -->
@@ -92,8 +93,13 @@
         <div class="hobbies-grid">
             {% for hobby in hobbies %}
             <div class="hobby-card">
-                <h3>{{ hobby.name }}</h3>
-                <p>{{ hobby.description }}</p>
+                {% if hobby.image %}
+                <img class="hobby-image" src="./static/img/{{ hobby.image }}" alt="{{ hobby.name }}">
+                {% endif %}
+                <div class="hobby-content">
+                    <h3>{{ hobby.name }}</h3>
+                    <p>{{ hobby.description }}</p>
+                </div>
             </div>
             {% endfor %}
         </div>

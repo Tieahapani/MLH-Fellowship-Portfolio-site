@@ -31,16 +31,27 @@
         </div>
     </header>
 
+    <div style="padding-top: 80px;"></div>
+
     <section class="section hobbies">
         <h2>{{ title }}</h2>
         <div class="hobbies-grid">
             {% for hobby in hobbies %}
             <div class="hobby-card">
-                <h3>{{ hobby.name }}</h3>
-                <p>{{ hobby.description }}</p>
+                {% if hobby.image %}
+                <img class="hobby-image" src="./static/img/{{ hobby.image }}" alt="{{ hobby.name }}">
+                {% endif %}
+                <div class="hobby-content">
+                    <h3>{{ hobby.name }}</h3>
+                    <p>{{ hobby.description }}</p>
+                </div>
             </div>
             {% endfor %}
         </div>
     </section>
+
+    <footer>
+        <p>Made with Flask & Jinja | MLH Fellowship</p>
+    </footer>
 </body>
 </html>
