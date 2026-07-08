@@ -278,6 +278,119 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+/* ── Timeline ── */
+.timeline-form-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.timeline-form-card h3 {
+    font-size: 20px;
+    color: #1a3a6b;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #2d7dd2;
+    box-shadow: 0 0 0 3px rgba(45, 125, 210, 0.1);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #1d539f, #2d7dd2);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(29, 83, 159, 0.3);
+}
+
+.timeline-post {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a3a6b;
+    margin: 0;
+}
+
+.post-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.post-content {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #444;
+    margin: 0;
+}
+
 /* ── Footer ── */
 footer {
     text-align: center;

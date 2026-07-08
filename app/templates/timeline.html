@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/">
+                <div class="nav-logo">
+                    <img src="./static/img/logo.svg" />
+                </div>
+            </a>
+            <nav>
+                {% for page in pages %}
+                <a href="{{ page.url }}">{{ page.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </header>
+
+    <div style="padding-top: 80px;"></div>
+
+    <section class="section timeline">
+        <h2>{{ title }}</h2>
+
+        <!-- Post Form -->
+        <div class="timeline-form-card">
+            <h3>Share an Update</h3>
+            <form id="timeline-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">What's on your mind?</label>
+                    <textarea id="content" name="content" rows="4" placeholder="Share your update..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Post Update</button>
+            </form>
+        </div>
+
+        <!-- Timeline Posts -->
+        <div id="timeline-posts">
+            {% for post in timeline_posts %}
+            <div class="timeline-post">
+                <div class="post-header">
+                    <img class="post-avatar" src="https://www.gravatar.com/avatar/{{ post.email_hash }}?s=50&d=identicon" alt="{{ post.name }}">
+                    <div>
+                        <h4 class="post-name">{{ post.name }}</h4>
+                        <span class="post-date">{{ post.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                    </div>
+                </div>
+                <p class="post-content">{{ post.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <p>Made with Flask & Jinja | MLH Fellowship</p>
+    </footer>
+
+    <script>
+        document.getElementById('timeline-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('/api/timeline_post', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
