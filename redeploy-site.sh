@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Kill all existing tmux sessions
-tmux kill-server 2>/dev/null || true
-
 # cd into project folder
 cd ~/MLH-Fellowship-Portfolio-site
 
@@ -13,6 +10,5 @@ git fetch && git reset origin/main --hard
 source python3-virtualenv/bin/activate
 pip install -r requirements.txt
 
-# Start a new detached tmux session that runs Flask
-tmux new-session -d -s flask -c ~/MLH-Fellowship-Portfolio-site \; \
-  send-keys 'source python3-virtualenv/bin/activate && flask run --host=0.0.0.0 --port=5000' Enter
+# Restart myportfolio service
+sudo systemctl restart myportfolio
