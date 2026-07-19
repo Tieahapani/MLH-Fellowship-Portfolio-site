@@ -6,31 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
+    <link rel="stylesheet" href="./static/styles/main.css">
     <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    {% block head %}{% endblock %}
     <title>{{ title }}</title>
 </head>
 
 <body>
-    <header class="nav-bar">
-        <div class="nav-content">
-            <a href="/">
-                <div class="nav-logo">
-                    <img src="./static/img/logo.svg" />
-                </div>
-            </a>
-            <nav>
-                {% for page in pages %}
-                <a href="{{ page.url }}">{{ page.name }}</a>
-                {% endfor %}
-            </nav>
-        </div>
-    </header>
+    <div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+    <nav class="pill-nav">
+        <a class="brand" href="/">Tiea Hapani</a>
+        {% for page in pages %}
+        <a href="{{ page.url }}">{{ page.name }}</a>
+        {% endfor %}
+    </nav>
 
     {% block content %}{% endblock %}
+
+    <footer>Made with Flask &amp; Jinja · MLH Fellowship</footer>
+
+    {% block scripts %}{% endblock %}
+    <script>
+        // scroll reveal
+        var io = new IntersectionObserver(function (es) {
+            es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('in'); });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+        // cursor glow follows mouse on glass cards
+        document.querySelectorAll('.glow-card').forEach(function (card) {
+            card.addEventListener('mousemove', function (e) {
+                var r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            });
+        });
+
+        // magnetic nav links
+        document.querySelectorAll('.pill-nav a').forEach(function (a) {
+            a.addEventListener('mousemove', function (e) {
+                var r = a.getBoundingClientRect();
+                a.style.transform = 'translate(' + (e.clientX - r.left - r.width / 2) * 0.3 + 'px,' + (e.clientY - r.top - r.height / 2) * 0.4 + 'px)';
+            });
+            a.addEventListener('mouseleave', function () { a.style.transform = ''; });
+        });
+    </script>
 </body>
 </html>
