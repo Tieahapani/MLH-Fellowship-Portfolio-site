@@ -9,7 +9,11 @@ from playhouse.shortcuts import model_to_dict
 load_dotenv()
 app = Flask(__name__)
 
-myportfoliodb = MySQLDatabase(
+if os.getenv("TESTING" ) == "true" :
+    print( "Running DB in test mode")
+    myportfoliodb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    myportfoliodb = MySQLDatabase(
     os.getenv("MYSQL_DATABASE"),
     user=os.getenv("MYSQL_USER"),
     password=os.getenv("MYSQL_PASSWORD"),
@@ -28,8 +32,12 @@ class TimelinePost(Model):
     class Meta:
         database = myportfoliodb
 
-myportfoliodb.connect()
-myportfoliodb.create_tables([TimelinePost])
+# Needed because otherwise Python tries to set up the DB, but
+# can't and errors with the following:
+# 'peewee.InterfaceError: Error, database must be initialized before opening a connection.'
+if __name__ == '__main__':
+    myportfoliodb.connect()
+    myportfoliodb.create_tables([TimelinePost])
 
 
 
