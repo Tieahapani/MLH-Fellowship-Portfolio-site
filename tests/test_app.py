@@ -25,8 +25,8 @@ class AppTestCase(unittest.TestCase):
         response = self.client.get("/")
         assert response.status_code == 200
         html = response.get_data(as_text=True)
-        assert "About Me" in html
-        assert "Volunteer Workflow Automation Assistant" in html
+        assert "Curious by default." in html
+        assert "Workflow Automation Assistant" in html
         assert "San Francisco State University" in html
         # Tests navbar
         assert "/timeline" in html

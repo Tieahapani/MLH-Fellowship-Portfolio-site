@@ -32,12 +32,8 @@ class TimelinePost(Model):
     class Meta:
         database = myportfoliodb
 
-# Needed because otherwise Python tries to set up the DB, but
-# can't and errors with the following:
-# 'peewee.InterfaceError: Error, database must be initialized before opening a connection.'
-if __name__ == '__main__':
-    myportfoliodb.connect()
-    myportfoliodb.create_tables([TimelinePost])
+myportfoliodb.connect()
+myportfoliodb.create_tables([TimelinePost])
 
 
 
