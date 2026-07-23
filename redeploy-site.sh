@@ -6,9 +6,8 @@ cd ~/MLH-Fellowship-Portfolio-site
 # Pull latest changes from GitHub
 git fetch && git reset origin/main --hard
 
-# Enter virtual environment and install dependencies
-source python3-virtualenv/bin/activate
-pip install -r requirements.txt
+# Spin containers down first to prevent out of memory issues while building
+docker compose -f docker-compose.prod.yml down
 
-# Restart myportfolio service
-sudo systemctl restart myportfolio
+# Rebuild and start containers
+docker compose -f docker-compose.prod.yml up -d --build
