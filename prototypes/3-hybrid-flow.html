@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype 3 — Hybrid Flow</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1d539f;
+  --blue-deep: #0f2b5e;
+  --blue-bright: #2d7dd2;
+  --ink: #1a2233;
+  --muted: #64708a;
+  --bg: #f6f8fc;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; }
+
+nav { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:100;
+  background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); border-radius:999px;
+  box-shadow:0 8px 32px rgba(15,43,94,0.12); padding:10px 10px 10px 24px; display:flex; align-items:center; gap:20px; }
+nav .brand { font-weight:700; font-size:14px; color:var(--blue-deep); text-decoration:none; }
+nav a.link { color:var(--muted); text-decoration:none; font-size:13.5px; font-weight:500; padding:8px 16px; border-radius:999px; transition:all .2s; }
+nav a.link:hover { background:var(--blue); color:white; }
+
+.hero { background:linear-gradient(150deg, var(--blue-deep), var(--blue) 55%, var(--blue-bright)); padding:150px 24px 160px; text-align:center; color:white; position:relative; }
+.hero img { width:160px; height:160px; border-radius:50%; object-fit:cover; border:5px solid rgba(255,255,255,0.2); box-shadow:0 20px 60px rgba(0,0,0,0.35); margin-bottom:26px; }
+.hero h1 { font-size:48px; font-weight:800; letter-spacing:-0.02em; }
+.hero .sub { color:rgba(255,255,255,0.75); margin-top:10px; font-weight:300; font-size:17px; }
+.hero svg.wave { position:absolute; bottom:-1px; left:0; width:100%; height:80px; display:block; }
+
+main { max-width:880px; margin:-70px auto 0; padding:0 24px 60px; position:relative; z-index:2; }
+section { margin-bottom:56px; }
+.panel { background:white; border-radius:22px; padding:40px 44px; box-shadow:0 10px 40px rgba(15,43,94,0.07); }
+.chip { display:inline-block; background:rgba(29,83,159,0.08); color:var(--blue); font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:6px 14px; border-radius:999px; margin-bottom:16px; }
+h2 { font-size:28px; font-weight:700; letter-spacing:-0.01em; margin-bottom:20px; }
+
+.about p { font-size:17.5px; color:#3d4960; font-weight:300; line-height:1.9; }
+.about strong { color:var(--blue); font-weight:600; }
+
+.tl { position:relative; padding-left:28px; }
+.tl::before { content:''; position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--blue-bright), rgba(45,125,210,0.1)); border-radius:2px; }
+.tl-item { position:relative; padding-bottom:28px; }
+.tl-item:last-child { padding-bottom:0; }
+.tl-item::before { content:''; position:absolute; left:-27px; top:7px; width:12px; height:12px; border-radius:50%; background:white; border:3px solid var(--blue-bright); }
+.tl-item h3 { font-size:17px; font-weight:600; }
+.tl-item .meta { font-size:13.5px; color:var(--blue); font-weight:500; margin-bottom:8px; }
+.tl-item li { font-size:14.5px; color:#4a5670; margin:6px 0 0 18px; }
+.tl-item p.detail { font-size:14.5px; color:#4a5670; }
+
+.hobby-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.hobby { position:relative; border-radius:18px; overflow:hidden; height:200px; cursor:default; }
+.hobby img { width:100%; height:100%; object-fit:cover; transition:transform .4s; }
+.hobby:hover img { transform:scale(1.06); }
+.hobby .ov { position:absolute; inset:0; background:linear-gradient(180deg, transparent 30%, rgba(10,20,40,0.85)); display:flex; flex-direction:column; justify-content:flex-end; padding:18px 20px; color:white; }
+.hobby h3 { font-size:16px; font-weight:600; }
+.hobby p { font-size:12.5px; color:rgba(255,255,255,0.75); margin-top:2px; }
+
+.places { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.place { background:linear-gradient(135deg, rgba(29,83,159,0.05), rgba(45,125,210,0.09)); border:1px solid rgba(29,83,159,0.12); border-radius:14px; padding:18px 20px; transition:transform .2s; }
+.place:hover { transform:translateY(-3px); }
+.place .nm { font-weight:600; font-size:15px; color:var(--blue-deep); }
+.place .nt { font-size:13px; color:var(--muted); margin-top:2px; }
+
+footer { text-align:center; padding:48px; color:var(--muted); font-size:13px; }
+@media(max-width:640px){ .hobby-grid,.places{grid-template-columns:1fr;} .hero h1{font-size:34px;} .panel{padding:28px 24px;} nav{width:calc(100% - 24px); justify-content:center;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="#">Tiea Hapani</a>
+  <a class="link" href="#">Home</a><a class="link" href="#">Hobbies</a><a class="link" href="#">Timeline</a>
+</nav>
+
+<header class="hero">
+  <img src="../app/static/img/IMG_5674.JPG" alt="Tiea">
+  <h1>MLH Fellow</h1>
+  <div class="sub">Developer · Learner · Builder</div>
+  <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path fill="#f6f8fc" d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z"/></svg>
+</header>
+
+<main>
+<section class="panel about">
+  <span class="chip">About Me</span>
+  <h2>Hello, I'm Tiea 👋</h2>
+  <p>I love learning and am always looking for ways to grow. I'm currently building <strong>ASGo</strong>, a travel management platform for Associated Students. My friends say I'm a good listener, and I look forward to being more ambitious in life.</p>
+</section>
+
+<section class="panel">
+  <span class="chip">Experience</span>
+  <h2>My journey so far</h2>
+  <div class="tl">
+    <div class="tl-item">
+      <h3>Senior Office Assistant</h3>
+      <div class="meta">Associated Students — SFSU · Aug 2024 – Present</div>
+      <ul>
+        <li>Built automation pipelines with Make.com, Zapier & Azure OCR — cut processing time by 40%.</li>
+        <li>Architected a Notion ecosystem tracking approvals across 10 departments.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <h3>Workflow Automation Assistant</h3>
+      <div class="meta">Mercy Clinic · Jun – Jul 2025</div>
+      <ul><li>Automated medicine credit reconciliation — cut manual Excel work by 60%.</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <span class="chip">Education</span>
+  <h2>Where I've studied</h2>
+  <div class="tl">
+    <div class="tl-item">
+      <h3>San Francisco State University</h3>
+      <div class="meta">Bachelor's Degree · Expected May 2027</div>
+      <p class="detail">Data Structures & Algorithms, Operating Systems, Programming Methodology + AI coursework.</p>
+    </div>
+    <div class="tl-item">
+      <h3>Lourdes Convent</h3>
+      <div class="meta">High School · Surat, Gujarat, India</div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <span class="chip">Hobbies</span>
+  <h2>Beyond the code</h2>
+  <div class="hobby-grid">
+    <div class="hobby"><img src="../app/static/img/hobby_walks.jpg"><div class="ov"><h3>Early Morning Walks</h3><p>Starting the day fresh</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_podcasts.jpg"><div class="ov"><h3>Podcasts</h3><p>New ideas & perspectives</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_food.jpg"><div class="ov"><h3>Trying New Foods</h3><p>Cuisines & flavors</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_coding.jpg"><div class="ov"><h3>Building Projects</h3><p>Always learning</p></div></div>
+  </div>
+</section>
+
+<section class="panel">
+  <span class="chip">Travel</span>
+  <h2>Places I've visited</h2>
+  <div class="places">
+    <div class="place"><div class="nm">🇳🇿 New Zealand</div><div class="nt">An amazing adventure</div></div>
+    <div class="place"><div class="nm">🇿🇦 South Africa</div><div class="nt">Saw the famous safari!</div></div>
+    <div class="place"><div class="nm">🇺🇸 Chicago, USA</div><div class="nt">Best place I've visited so far</div></div>
+    <div class="place"><div class="nm">🇫🇮 Lapland, Finland</div><div class="nt">Dream — northern lights!</div></div>
+  </div>
+</section>
+</main>
+
+<footer>Made with Flask & Jinja · MLH Fellowship</footer>
+</body>
+</html>

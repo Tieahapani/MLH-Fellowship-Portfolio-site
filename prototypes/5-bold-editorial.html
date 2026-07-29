@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype 5 — Bold Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root { --blue:#1d539f; --electric:#2d7dd2; --cream:#faf7f0; --ink:#101318; --accent:#ff5a36; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Space Grotesk',sans-serif; background:var(--cream); color:var(--ink); overflow-x:hidden; line-height:1.65; }
+h1,h2,h3,.big { font-family:'Archivo',sans-serif; }
+
+nav { position:fixed; top:0; width:100%; z-index:200; background:var(--cream); border-bottom:2px solid var(--ink); }
+.nav-in { display:flex; justify-content:space-between; align-items:center; padding:16px 28px; }
+.nav-in .brand { font-family:'Archivo'; font-weight:900; font-size:17px; text-transform:uppercase; letter-spacing:0.02em; color:var(--ink); text-decoration:none; }
+.nav-in .links a { color:var(--ink); text-decoration:none; font-weight:500; font-size:14px; margin-left:24px; border-bottom:2px solid transparent; transition:border-color .2s; }
+.nav-in .links a:hover { border-color:var(--accent); }
+
+.hero { background:var(--blue); color:var(--cream); padding:150px 28px 0; border-bottom:2px solid var(--ink); position:relative; overflow:hidden; }
+.hero-in { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr; gap:40px; align-items:end; }
+.hero h1 { font-size:clamp(56px,9vw,120px); font-weight:900; line-height:0.95; letter-spacing:-0.03em; text-transform:uppercase; padding-bottom:50px; }
+.hero h1 em { font-style:normal; color:transparent; -webkit-text-stroke:2px var(--cream); }
+.hero img { width:100%; max-width:360px; display:block; border:2px solid var(--ink); border-radius:0; filter:contrast(1.05); transform:translateY(2px); }
+.marquee { background:var(--accent); color:var(--ink); border-top:2px solid var(--ink); overflow:hidden; white-space:nowrap; padding:12px 0; font-family:'Archivo'; font-weight:700; text-transform:uppercase; font-size:15px; letter-spacing:0.08em; }
+.marquee .track { display:inline-block; animation:scrolltxt 18s linear infinite; }
+@keyframes scrolltxt { to{transform:translateX(-50%);} }
+
+main { max-width:1100px; margin:0 auto; padding:0 28px; }
+section { padding:90px 0; border-bottom:2px solid var(--ink); }
+section:last-of-type { border-bottom:none; }
+.sec-title { display:flex; align-items:baseline; gap:20px; margin-bottom:44px; }
+.sec-title .idx { font-family:'Archivo'; font-weight:900; font-size:16px; color:var(--accent); }
+h2 { font-size:clamp(34px,5vw,56px); font-weight:900; text-transform:uppercase; letter-spacing:-0.02em; }
+
+.reveal { opacity:0; transform:translateY(40px); transition:all .7s cubic-bezier(.2,.8,.2,1); }
+.reveal.in { opacity:1; transform:none; }
+
+.about p { font-size:clamp(20px,2.6vw,28px); font-weight:300; line-height:1.6; max-width:850px; }
+.about strong { font-weight:700; background:linear-gradient(transparent 60%, rgba(45,125,210,0.35) 60%); }
+
+.job { display:grid; grid-template-columns:1fr 2fr; gap:28px; padding:34px 0; border-top:2px solid var(--ink); transition:background .2s, padding-left .3s; }
+.job:hover { background:rgba(29,83,159,0.05); padding-left:16px; }
+.job:first-of-type { border-top:none; }
+.job .l h3 { font-size:22px; font-weight:900; text-transform:uppercase; }
+.job .l .m { font-size:14px; color:var(--blue); font-weight:500; margin-top:6px; }
+.job .r li { font-size:16px; margin:8px 0 0 18px; }
+.job .r p { font-size:16px; }
+
+.hobby-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:2px solid var(--ink); }
+.hobby { border-right:2px solid var(--ink); position:relative; overflow:hidden; cursor:default; }
+.hobby:last-child { border-right:none; }
+.hobby img { width:100%; height:260px; object-fit:cover; display:block; filter:grayscale(60%); transition:filter .4s, transform .4s; }
+.hobby:hover img { filter:grayscale(0%); transform:scale(1.05); }
+.hobby .cap { padding:16px; border-top:2px solid var(--ink); background:var(--cream); position:relative; z-index:1; }
+.hobby h3 { font-size:14px; font-weight:900; text-transform:uppercase; letter-spacing:0.02em; }
+.hobby p { font-size:12px; color:#555; margin-top:4px; }
+
+#map { height:460px; border:2px solid var(--ink); }
+.map-note { margin-top:14px; font-size:13px; text-transform:uppercase; letter-spacing:0.1em; color:#666; }
+
+footer { background:var(--ink); color:var(--cream); text-align:center; padding:44px; font-size:13px; text-transform:uppercase; letter-spacing:0.15em; }
+@media(max-width:800px){ .hero-in{grid-template-columns:1fr;} .hero img{max-width:240px;} .job{grid-template-columns:1fr;} .hobby-grid{grid-template-columns:repeat(2,1fr);} .hobby:nth-child(2){border-right:none;} }
+</style>
+</head>
+<body>
+<nav><div class="nav-in">
+  <a class="brand" href="#">Tiea Hapani</a>
+  <div class="links"><a href="#">Home</a><a href="#">Hobbies</a><a href="#">Timeline</a></div>
+</div></nav>
+
+<header class="hero">
+  <div class="hero-in">
+    <h1>MLH<br><em>Fellow</em><br>2026</h1>
+    <img src="../app/static/img/IMG_5674.JPG" alt="Tiea">
+  </div>
+  <div class="marquee"><span class="track">Developer · Learner · Builder · ASGo · Automation · Flask · Python · Developer · Learner · Builder · ASGo · Automation · Flask · Python · </span></div>
+</header>
+
+<main>
+<section class="about reveal">
+  <div class="sec-title"><span class="idx">01</span><h2>About</h2></div>
+  <p>I love learning and am always looking for ways to grow. I'm currently building <strong>ASGo</strong>, a travel management platform for Associated Students. My friends say I'm a good listener, and I look forward to being more ambitious in life.</p>
+</section>
+
+<section class="reveal">
+  <div class="sec-title"><span class="idx">02</span><h2>Work</h2></div>
+  <div class="job">
+    <div class="l"><h3>Senior Office Assistant</h3><div class="m">Associated Students — SFSU<br>Aug 2024 – Present</div></div>
+    <div class="r"><ul>
+      <li>Built end-to-end automation pipelines using Make.com, Zapier, and Azure OCR — cutting manual processing time by 40%.</li>
+      <li>Architected a Notion ecosystem tracking document approvals across 10 departments.</li>
+    </ul></div>
+  </div>
+  <div class="job">
+    <div class="l"><h3>Automation Assistant</h3><div class="m">Mercy Clinic<br>Jun – Jul 2025</div></div>
+    <div class="r"><ul><li>Automated quarterly medicine credit reconciliation — cutting manual Excel comparisons by 60%.</li></ul></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-title"><span class="idx">03</span><h2>Education</h2></div>
+  <div class="job">
+    <div class="l"><h3>SF State University</h3><div class="m">Bachelor's · May 2027</div></div>
+    <div class="r"><p>Data Structures & Algorithms, Operating Systems, Programming Methodology, plus AI coursework and workshops.</p></div>
+  </div>
+  <div class="job">
+    <div class="l"><h3>Lourdes Convent</h3><div class="m">High School · Surat, India</div></div>
+    <div class="r"></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-title"><span class="idx">04</span><h2>Hobbies</h2></div>
+  <div class="hobby-grid">
+    <div class="hobby"><img src="../app/static/img/hobby_walks.jpg"><div class="cap"><h3>Morning Walks</h3><p>Starting the day fresh</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_podcasts.jpg"><div class="cap"><h3>Podcasts</h3><p>Ideas & perspectives</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_food.jpg"><div class="cap"><h3>New Foods</h3><p>Cuisines & flavors</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_coding.jpg"><div class="cap"><h3>Building</h3><p>Always learning</p></div></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-title"><span class="idx">05</span><h2>Travel</h2></div>
+  <div id="map"></div>
+  <div class="map-note">New Zealand · South Africa · Chicago · Lapland</div>
+</section>
+</main>
+
+<footer>Made with Flask & Jinja — MLH Fellowship</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('map',{scrollWheelZoom:false}).setView([20,0],2);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+[["New Zealand",-40.9006,174.886,"An amazing adventure"],
+ ["South Africa",-30.5595,22.9375,"Saw the famous safari!"],
+ ["Chicago, USA",41.8781,-87.6298,"Best place I have visited so far"],
+ ["Lapland, Finland",68.0,26.0,"Dream — northern lights!"]].forEach(function(l){
+  L.circleMarker([l[1],l[2]],{radius:9,color:'#101318',weight:2,fillColor:'#ff5a36',fillOpacity:1})
+   .addTo(map).bindPopup("<strong>"+l[0]+"</strong><br>"+l[3]);
+});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+</script>
+</body>
+</html>

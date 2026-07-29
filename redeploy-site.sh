@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e 
+
 # cd into project folder
 cd ~/MLH-Fellowship-Portfolio-site
 
@@ -11,3 +13,4 @@ docker compose -f docker-compose.prod.yml down
 
 # Rebuild and start containers
 docker compose -f docker-compose.prod.yml up -d --build
+

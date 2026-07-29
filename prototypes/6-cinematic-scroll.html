@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype 6 — Cinematic Scroll</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root { --blue:#1d539f; --deep:#0a1f45; --bright:#3b8ae0; --paper:#f4f6fb; --ink:#141a26; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Manrope',sans-serif; background:var(--paper); color:var(--ink); line-height:1.7; overflow-x:hidden; }
+
+/* progress bar */
+#progress { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--blue),var(--bright)); width:0%; z-index:300; transition:width .1s linear; }
+
+nav { position:fixed; top:0; width:100%; z-index:200; padding:20px 36px; display:flex; justify-content:space-between; align-items:center; mix-blend-mode:difference; color:white; }
+nav .brand { font-weight:800; font-size:15px; color:white; text-decoration:none; }
+nav .links a { color:white; text-decoration:none; font-size:13.5px; font-weight:600; margin-left:26px; opacity:0.75; transition:opacity .2s; }
+nav .links a:hover { opacity:1; }
+
+/* hero — full screen, parallax photo */
+.hero { height:100vh; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden;
+  background:linear-gradient(150deg,var(--deep),var(--blue) 60%,var(--bright)); color:white; text-align:center; }
+.hero .stars { position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.18) 1px, transparent 1px); background-size:34px 34px; animation:pan 40s linear infinite; }
+@keyframes pan { to{background-position:340px 170px;} }
+.hero .inner { position:relative; z-index:2; }
+.hero img { width:170px; height:170px; border-radius:50%; object-fit:cover; border:4px solid rgba(255,255,255,0.3); box-shadow:0 30px 80px rgba(0,0,0,0.4); margin-bottom:30px;
+  animation:float 5s ease-in-out infinite; }
+@keyframes float { 50%{transform:translateY(-12px);} }
+.hero h1 { font-size:clamp(44px,7vw,84px); font-weight:800; letter-spacing:-0.03em; line-height:1.05; }
+.hero h1 span { display:block; font-size:0.35em; font-weight:300; letter-spacing:0.4em; text-transform:uppercase; margin-top:18px; color:rgba(255,255,255,0.65); }
+.hero .down { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); width:26px; height:44px; border:2px solid rgba(255,255,255,0.5); border-radius:14px; }
+.hero .down::after { content:''; position:absolute; top:8px; left:50%; width:4px; height:8px; margin-left:-2px; border-radius:4px; background:white; animation:wheel 1.6s ease-in-out infinite; }
+@keyframes wheel { 50%{transform:translateY(14px); opacity:0.2;} }
+
+/* sticky chapter sections */
+.chapter { min-height:100vh; display:flex; align-items:center; padding:100px 36px; }
+.chapter .wrap { max-width:1000px; margin:0 auto; width:100%; display:grid; grid-template-columns:0.9fr 1.4fr; gap:60px; align-items:start; }
+.chapter .head { position:sticky; top:120px; }
+.kicker { font-size:12px; font-weight:800; letter-spacing:0.3em; text-transform:uppercase; color:var(--bright); margin-bottom:12px; }
+h2 { font-size:clamp(36px,5vw,58px); font-weight:800; letter-spacing:-0.03em; line-height:1.05; }
+.chapter.alt { background:var(--deep); color:#e8edf7; }
+.chapter.alt .kicker { color:#7db4ec; }
+
+.reveal { opacity:0; transform:translateY(60px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1); }
+.reveal.in { opacity:1; transform:none; }
+
+.about-txt { font-size:clamp(19px,2.2vw,24px); font-weight:300; line-height:1.85; }
+.about-txt strong { font-weight:800; color:var(--blue); }
+.chapter.alt .about-txt strong { color:#7db4ec; }
+
+.stack .item { padding:30px 0; border-bottom:1px solid rgba(20,26,38,0.12); }
+.chapter.alt .stack .item { border-color:rgba(255,255,255,0.12); }
+.stack h3 { font-size:20px; font-weight:800; }
+.stack .m { font-size:13.5px; font-weight:600; color:var(--bright); margin:4px 0 10px; }
+.stack li { font-size:15px; margin:7px 0 0 18px; color:#3c4658; }
+.chapter.alt .stack li, .chapter.alt .stack p { color:#b6c2d8; }
+.stack p { font-size:15px; color:#3c4658; }
+
+.hgrid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.hcard { border-radius:18px; overflow:hidden; position:relative; height:210px; box-shadow:0 14px 40px rgba(10,31,69,0.25); transition:transform .35s; }
+.hcard:hover { transform:translateY(-8px) rotate(-0.5deg); }
+.hcard img { width:100%; height:100%; object-fit:cover; }
+.hcard .ov { position:absolute; inset:0; background:linear-gradient(180deg,transparent 45%,rgba(10,31,69,0.9)); color:white; display:flex; flex-direction:column; justify-content:flex-end; padding:18px; }
+.hcard h3 { font-size:16px; font-weight:800; }
+.hcard p { font-size:12.5px; opacity:0.8; }
+
+#map { height:480px; border-radius:20px; box-shadow:0 16px 50px rgba(10,31,69,0.18); }
+
+footer { background:var(--deep); color:rgba(255,255,255,0.5); text-align:center; padding:52px; font-size:13px; }
+@media(max-width:800px){ .chapter .wrap{grid-template-columns:1fr; gap:30px;} .chapter .head{position:static;} .hgrid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav>
+  <a class="brand" href="#">Tiea Hapani</a>
+  <div class="links"><a href="#">Home</a><a href="#">Hobbies</a><a href="#">Timeline</a></div>
+</nav>
+
+<header class="hero">
+  <div class="stars"></div>
+  <div class="inner">
+    <img src="../app/static/img/IMG_5674.JPG" alt="Tiea">
+    <h1>MLH Fellow<span>Developer — Learner — Builder</span></h1>
+  </div>
+  <div class="down"></div>
+</header>
+
+<section class="chapter">
+  <div class="wrap">
+    <div class="head"><div class="kicker">Chapter 01</div><h2>About<br>me.</h2></div>
+    <div class="reveal"><p class="about-txt">I love learning and am always looking for ways to grow. I'm currently building <strong>ASGo</strong>, a travel management platform for Associated Students. My friends say I'm a good listener, and I look forward to being more ambitious in life.</p></div>
+  </div>
+</section>
+
+<section class="chapter alt">
+  <div class="wrap">
+    <div class="head"><div class="kicker">Chapter 02</div><h2>Where<br>I work.</h2></div>
+    <div class="stack reveal">
+      <div class="item">
+        <h3>Senior Office Assistant</h3>
+        <div class="m">Associated Students — SFSU · Aug 2024 – Present</div>
+        <ul>
+          <li>Built end-to-end automation pipelines using Make.com, Zapier & Azure OCR — cut manual processing time by 40%.</li>
+          <li>Architected a Notion ecosystem tracking document approvals across 10 departments.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <h3>Workflow Automation Assistant</h3>
+        <div class="m">Mercy Clinic · Jun – Jul 2025</div>
+        <ul><li>Automated quarterly medicine credit reconciliation — cut manual Excel comparisons by 60%.</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap">
+    <div class="head"><div class="kicker">Chapter 03</div><h2>Where<br>I learn.</h2></div>
+    <div class="stack reveal">
+      <div class="item">
+        <h3>San Francisco State University</h3>
+        <div class="m">Bachelor's Degree · Expected May 2027</div>
+        <p>Data Structures & Algorithms, Operating Systems, Programming Methodology — plus AI courses and workshops.</p>
+      </div>
+      <div class="item">
+        <h3>Lourdes Convent</h3>
+        <div class="m">High School · Surat, Gujarat, India</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter alt">
+  <div class="wrap">
+    <div class="head"><div class="kicker">Chapter 04</div><h2>What<br>I love.</h2></div>
+    <div class="hgrid reveal">
+      <div class="hcard"><img src="../app/static/img/hobby_walks.jpg"><div class="ov"><h3>Early Morning Walks</h3><p>Starting the day fresh</p></div></div>
+      <div class="hcard"><img src="../app/static/img/hobby_podcasts.jpg"><div class="ov"><h3>Podcasts</h3><p>New ideas & perspectives</p></div></div>
+      <div class="hcard"><img src="../app/static/img/hobby_food.jpg"><div class="ov"><h3>Trying New Foods</h3><p>Cuisines & flavors</p></div></div>
+      <div class="hcard"><img src="../app/static/img/hobby_coding.jpg"><div class="ov"><h3>Building Projects</h3><p>Always learning</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap">
+    <div class="head"><div class="kicker">Chapter 05</div><h2>Where<br>I've been.</h2></div>
+    <div class="reveal"><div id="map"></div></div>
+  </div>
+</section>
+
+<footer>Made with Flask & Jinja · MLH Fellowship</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('map',{scrollWheelZoom:false}).setView([20,0],2);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+[["New Zealand",-40.9006,174.886,"An amazing adventure"],
+ ["South Africa",-30.5595,22.9375,"Saw the famous safari!"],
+ ["Chicago, USA",41.8781,-87.6298,"Best place I have visited so far"],
+ ["Lapland, Finland",68.0,26.0,"Dream — northern lights!"]].forEach(function(l){
+  L.circleMarker([l[1],l[2]],{radius:8,color:'#0a1f45',weight:2,fillColor:'#3b8ae0',fillOpacity:0.9})
+   .addTo(map).bindPopup("<strong>"+l[0]+"</strong><br>"+l[3]);
+});
+
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+window.addEventListener('scroll',function(){
+  var h=document.documentElement;
+  document.getElementById('progress').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+});
+</script>
+</body>
+</html>

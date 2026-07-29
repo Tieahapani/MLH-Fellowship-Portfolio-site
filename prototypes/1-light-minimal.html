@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype 1 — Light Minimal</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1d539f;
+  --blue-deep: #0f2b5e;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --line: #e8eaf0;
+  --bg: #fcfcfd;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; }
+.serif { font-family:'Playfair Display',serif; }
+
+nav { position:fixed; top:0; width:100%; z-index:100; background:rgba(252,252,253,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+.nav-inner { max-width:960px; margin:0 auto; padding:18px 32px; display:flex; justify-content:space-between; align-items:center; }
+.nav-inner .brand { font-weight:600; font-size:15px; letter-spacing:0.02em; color:var(--ink); text-decoration:none; }
+.nav-inner .links a { color:var(--muted); text-decoration:none; font-size:14px; margin-left:28px; transition:color .2s; }
+.nav-inner .links a:hover { color:var(--blue); }
+
+.hero { background:linear-gradient(160deg, var(--blue-deep) 0%, var(--blue) 70%, #2d7dd2 100%); padding:160px 32px 110px; text-align:center; color:white; }
+.hero img { width:150px; height:150px; border-radius:50%; object-fit:cover; border:3px solid rgba(255,255,255,0.25); margin-bottom:28px; }
+.hero h1 { font-size:52px; font-weight:700; letter-spacing:-0.02em; }
+.hero p { color:rgba(255,255,255,0.65); font-size:17px; font-weight:300; margin-top:10px; letter-spacing:0.06em; text-transform:uppercase; font-size:13px; }
+
+main { max-width:760px; margin:0 auto; padding:0 32px; }
+section { padding:88px 0; border-bottom:1px solid var(--line); }
+section:last-of-type { border-bottom:none; }
+.eyebrow { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); font-weight:600; margin-bottom:14px; }
+h2 { font-size:34px; font-weight:700; letter-spacing:-0.01em; margin-bottom:32px; }
+
+.about p { font-size:19px; font-weight:300; color:#374151; line-height:1.9; }
+.about strong { font-weight:600; color:var(--ink); }
+
+.job { display:grid; grid-template-columns:150px 1fr; gap:32px; padding:28px 0; border-top:1px solid var(--line); }
+.job:first-of-type { border-top:none; padding-top:0; }
+.job .dates { font-size:13px; color:var(--muted); padding-top:4px; }
+.job h3 { font-size:18px; font-weight:600; }
+.job .co { font-size:14px; color:var(--blue); margin-bottom:10px; }
+.job li { font-size:15px; color:#4b5563; margin:8px 0 0 18px; }
+
+.edu { padding:22px 0; border-top:1px solid var(--line); }
+.edu:first-of-type { border-top:none; padding-top:0; }
+.edu h3 { font-size:17px; font-weight:600; }
+.edu .meta { font-size:14px; color:var(--muted); margin:4px 0 8px; }
+.edu p { font-size:15px; color:#4b5563; }
+
+.hobby-row { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.hobby { border:1px solid var(--line); border-radius:16px; overflow:hidden; background:white; transition:transform .25s, box-shadow .25s; }
+.hobby:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(15,43,94,0.08); }
+.hobby img { width:100%; height:150px; object-fit:cover; display:block; }
+.hobby .txt { padding:18px 20px; }
+.hobby h3 { font-size:15px; font-weight:600; margin-bottom:4px; }
+.hobby p { font-size:13.5px; color:var(--muted); line-height:1.6; }
+
+.place { display:flex; justify-content:space-between; align-items:baseline; padding:16px 0; border-top:1px solid var(--line); }
+.place:first-of-type { border-top:none; }
+.place .nm { font-weight:500; font-size:16px; }
+.place .nt { font-size:14px; color:var(--muted); font-style:italic; }
+
+footer { text-align:center; padding:56px 32px; color:var(--muted); font-size:13px; }
+@media(max-width:640px){ .job{grid-template-columns:1fr; gap:8px;} .hobby-row{grid-template-columns:1fr;} .hero h1{font-size:36px;} }
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a class="brand" href="#">Tiea Hapani</a>
+  <div class="links"><a href="#">Home</a><a href="#">Hobbies</a><a href="#">Timeline</a></div>
+</div></nav>
+
+<header class="hero">
+  <img src="../app/static/img/IMG_5674.JPG" alt="Tiea">
+  <h1 class="serif">MLH Fellow</h1>
+  <p>Developer · Learner · Builder</p>
+</header>
+
+<main>
+<section class="about">
+  <div class="eyebrow">About</div>
+  <h2 class="serif">Hello, I'm Tiea.</h2>
+  <p>I love learning and am always looking for ways to grow. I'm currently building <strong>ASGo</strong>, a travel management platform for Associated Students. My friends say I'm a good listener, and I look forward to being more ambitious in life.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Experience</div>
+  <h2 class="serif">Where I've worked</h2>
+  <div class="job">
+    <div class="dates">Aug 2024 — Present</div>
+    <div>
+      <h3>Senior Office Assistant</h3>
+      <div class="co">Associated Students — SFSU</div>
+      <ul>
+        <li>Built end-to-end automation pipelines using Make.com, Zapier, and Azure OCR for receipt data extraction, cutting manual processing time by 40%.</li>
+        <li>Architected a Notion ecosystem tracking document approvals across 10 departments.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="job">
+    <div class="dates">Jun — Jul 2025</div>
+    <div>
+      <h3>Workflow Automation Assistant</h3>
+      <div class="co">Mercy Clinic</div>
+      <ul><li>Automated quarterly medicine credit reconciliation, cutting manual Excel comparisons by 60%.</li></ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Education</div>
+  <h2 class="serif">Where I've studied</h2>
+  <div class="edu">
+    <h3>San Francisco State University</h3>
+    <div class="meta">Bachelor's Degree · Expected May 2027</div>
+    <p>Data Structures & Algorithms, Operating Systems, Programming Methodology. Also pursuing AI courses and workshops.</p>
+  </div>
+  <div class="edu">
+    <h3>Lourdes Convent</h3>
+    <div class="meta">High School · Surat, Gujarat, India</div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Hobbies</div>
+  <h2 class="serif">Beyond the code</h2>
+  <div class="hobby-row">
+    <div class="hobby"><img src="../app/static/img/hobby_walks.jpg"><div class="txt"><h3>Early Morning Walks</h3><p>Calms me down and helps me start the day fresh.</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_podcasts.jpg"><div class="txt"><h3>Listening to Podcasts</h3><p>Learning new things and hearing different perspectives.</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_food.jpg"><div class="txt"><h3>Trying New Foods</h3><p>Exploring different cuisines and flavors.</p></div></div>
+    <div class="hobby"><img src="../app/static/img/hobby_coding.jpg"><div class="txt"><h3>Building Projects</h3><p>Constantly picking up new skills to grow as a developer.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Travel</div>
+  <h2 class="serif">Places I've visited</h2>
+  <div class="place"><span class="nm">New Zealand</span><span class="nt">An amazing adventure</span></div>
+  <div class="place"><span class="nm">South Africa</span><span class="nt">Saw the famous safari!</span></div>
+  <div class="place"><span class="nm">Chicago, USA</span><span class="nt">Best place I've visited so far</span></div>
+  <div class="place"><span class="nm">Lapland, Finland</span><span class="nt">Dream — northern lights!</span></div>
+</section>
+</main>
+
+<footer>Made with Flask & Jinja · MLH Fellowship</footer>
+</body>
+</html>
