@@ -26,5 +26,5 @@ jobs:
           SSH_IP: ${{ secrets.SSH_IP }}
           SSH_USER: ${{ secrets.SSH_USER }}
 
-      - name: Print project root directory
-        run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
+      - name: Deploy site
+        run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && bash redeploy-site.sh'
